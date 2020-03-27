@@ -1,0 +1,195 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>GridView实现内部item高度的加载时动态调节(根据count个数决定显示几行) | 写笔记</title>
+<link rel="shortcut icon" href="https://caoliyu-blog.github.io/favicon.ico?v=1585304154510">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<link rel="stylesheet" href="https://caoliyu-blog.github.io/styles/main.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<script src="media/scripts/index.js"></script>
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            写笔记
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
+</nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    GridView实现内部item高度的加载时动态调节(根据count个数决定显示几行)
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-03-27 ·
+                    </time>
+                    
+                        <a href="https://caoliyu-blog.github.io/tag/android/" class="post-tags">
+                            # android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>GridView内部item高度的动态调节实现，一般情况在知道 gridview总高度时， android系统会自动去适配调整，但是界面会挤在上端，没有办法实现自动整个平铺开来，导致界面不是我们想要的结果。</p>
+<!-- more -->
+<h2 id="延用网络上-csdn类似的问题描述如下">延用网络上 csdn类似的问题描述如下：</h2>
+<p>如：想要的结果为：<br>
+<img src="https://caoliyu-blog.github.io/post-images/1585295314815.png" alt="" loading="lazy"><br>
+而用android自带的实现效果，出来的结果却时：<br>
+<img src="https://caoliyu-blog.github.io/post-images/1585295338974.png" alt="" loading="lazy"></p>
+<p>这时我们可以通过在Adapter的 getView()中通过setLayoutParams() 来调节内部的 item高度:</p>
+<h2 id="实现代码如下">实现代码如下：</h2>
+<pre><code class="language-java">			//自动调节好 item 高度
+			AbsListView.LayoutParams param = new AbsListView.LayoutParams(
+					android.view.ViewGroup.LayoutParams.FILL_PARENT,
+					mGridView.getHeight()/linenum);//传入自己需要的宽高
+			view.setLayoutParams(param);
+</code></pre>
+<p>其中 view为getView()中的viewGroup,而 linenum为根据数据项多少，计算出来的要显示几行数据，它通过在getCount中先计算出来。</p>
+<h2 id="更完整的实现代码如下">更完整的实现代码如下：</h2>
+<pre><code class="language-java">	class ListAdapter extends BaseAdapter {
+		private int linenum = 1;
+		@Override
+		public int getCount() {
+			int count = mListData.size();
+			linenum = (count+3)/4;
+			return count;
+		}
+        
+        @Override
+		public View getView(final int position, View convertView, ViewGroup parent) {
+			View view = YaoTouPiaoSelectActivity.this.getLayoutInflater().inflate(R.layout.item_dt_yao_tou_piao, null);
+
+			//自动调节好 item 高度
+			AbsListView.LayoutParams param = new AbsListView.LayoutParams(
+					android.view.ViewGroup.LayoutParams.FILL_PARENT,
+					mGridView.getHeight()/linenum);//传入自己需要的宽高
+			view.setLayoutParams(param);
+
+
+            //... 其它代码部分
+		}
+
+// ...其它部分代码
+}
+</code></pre>
+<h2 id="实现结果如下">实现结果如下</h2>
+<p>当数据显示为2行时，它把整个的gridview高度的一半用作item高度：<br>
+<img src="https://caoliyu-blog.github.io/post-images/1585295792872.png" alt="" loading="lazy"><br>
+而当数据显示为1行时，它自动把整个 gridview当作item的高度<br>
+<img src="https://caoliyu-blog.github.io/post-images/1585295865175.png" alt="" loading="lazy"></p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://caoliyu-blog.github.io/post/android-listview-in-scrollview-problem/" class="post-title gt-a-link">
+                    android的scrollView内部加入listView的方法
+                </a>
+            </div>
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">学习工作过程中，碰到的常用问题记录，简单书写笔记</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    书写笔记，记录点滴  Powered by <a href="http://xiebj.net">caoliyu1086@163.com</a> | <a href="https://caoliyu-blog.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+
+
+    </div>
+</div>
+</body>
+</html>

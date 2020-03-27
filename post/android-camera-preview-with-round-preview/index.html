@@ -1,0 +1,225 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>android 摄像头圆形预览方式实现 | 写笔记</title>
+<link rel="shortcut icon" href="https://caoliyu-blog.github.io/favicon.ico?v=1585304154510">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<link rel="stylesheet" href="https://caoliyu-blog.github.io/styles/main.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<script src="media/scripts/index.js"></script>
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            写笔记
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
+</nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    android 摄像头圆形预览方式实现
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-03-24 ·
+                    </time>
+                    
+                        <a href="https://caoliyu-blog.github.io/tag/android/" class="post-tags">
+                            # android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>常规的摄像头预览实现方法见 <a href="../android-camera-preview-and-get-data/">android 摄像头采集和预览实现方法</a>，本文讨论一种特殊形状的(圆形)预览的实现方法，它通过重写SurfaceView的onMeasure()，draw()方法来实现。</p>
+<!-- more -->
+<p>其它实现过程见 <a href="../android-camera-preview-and-get-data/">android 摄像头采集和预览实现方法</a>，此处只讨论实现圆形的重写 SurfaceView部分。</p>
+<p><strong>首先重写SurfaceView为RoundSurfaceView，内容如下：</strong></p>
+<pre><code class="language-java">public class RoundSurfaceView extends SurfaceView {
+    private int width;
+    private int height;
+
+    //构造函数部分：此处我们使用默认的就行了，不用作修改
+    public RoundSurfaceView(Context context) {
+        super(context);
+    }
+    public RoundSurfaceView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+    public RoundSurfaceView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+    public RoundSurfaceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+
+  //重写 onMeasure()，用来指定view的大小
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        width = getScreenWidth(getContext());
+        height = width;
+
+        setMeasuredDimension((int) width, (int) height);
+    }
+
+    //获取屏幕的screen宽度
+    private int getScreenWidth(Context context) {
+        WindowManager windowManager = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();// 创建了一张白纸
+        windowManager.getDefaultDisplay().getMetrics(outMetrics);// 给白纸设置宽高
+        return outMetrics.widthPixels;
+    }
+
+  //重写 draw()，在此处画个圆，注意得在 xml文件中指定相应的 background
+    @Override
+    public void draw(Canvas canvas) {
+        //主要实现 draw方法
+        Log.e(&quot;tag&quot;, &quot;draw:&quot;);
+        Path path = new Path();
+        //设置裁剪的圆心，半径
+        path.addCircle(width / 2, height / 2, width / 3, Path.Direction.CCW);
+
+        //裁剪画布，并设置其填充方式
+        canvas.clipPath(path, Region.Op.REPLACE);
+
+        super.draw(canvas);
+    }
+}
+</code></pre>
+<p><strong>使用的 layout中 xml文件如下(注意指定 background)：</strong></p>
+<pre><code class="language-xml">    &lt;cn.xiebj.cameraroundpreview.RoundSurfaceView
+        android:id=&quot;@+id/surfaceView&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:background=&quot;@drawable/circle&quot;/&gt;
+</code></pre>
+<p><strong>background指定的文件内容如下：</strong></p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;shape xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    android:shape=&quot;rectangle&quot;&gt;
+    &lt;solid android:color=&quot;#00000000&quot; /&gt;
+    &lt;corners android:radius=&quot;90dp&quot; /&gt;
+    &lt;stroke
+        android:width=&quot;4dp&quot;
+        android:color=&quot;#fff&quot; /&gt;
+&lt;/shape&gt;
+</code></pre>
+<p>界面的运行结果如下：<br>
+<img src="https://caoliyu-blog.github.io/post-images/1585128851877.png" alt="" loading="lazy"></p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://caoliyu-blog.github.io/post/android-nostra13-niversal-image-loader/" class="post-title gt-a-link">
+                    一个功能强大的android图片加载开源库nostra13 / Android-Universal-Image-Loader
+                </a>
+            </div>
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">学习工作过程中，碰到的常用问题记录，简单书写笔记</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    书写笔记，记录点滴  Powered by <a href="http://xiebj.net">caoliyu1086@163.com</a> | <a href="https://caoliyu-blog.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>android 摄像头采集和预览实现方法 | 写笔记</title>
+<link rel="shortcut icon" href="https://caoliyu-blog.github.io/favicon.ico?v=1585304154510">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<link rel="stylesheet" href="https://caoliyu-blog.github.io/styles/main.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<script src="media/scripts/index.js"></script>
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            写笔记
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
+</nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    android 摄像头采集和预览实现方法
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-03-23 ·
+                    </time>
+                    
+                        <a href="https://caoliyu-blog.github.io/tag/android/" class="post-tags">
+                            # android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>android实现摄像头数据采取的方法有好几种，本文介绍的方法思路为：使用 setPreviewDisplay 将图像渲染到 SurfaceView 上，然后setPreviewCallbackWithBuffer获取图像数据。</p>
+<!-- more -->
+<h2 id="1首先进行摄像头权限申请">1.首先进行摄像头权限申请:</h2>
+<p>在 AndroidManifest.xml 文件中进行权限申请， (当然在高版本的内核中，要使用动态申请的方式)<br>
+否则会出现  Fail to connect to camera service 异常出错的问题，申请方法如下：</p>
+<pre><code class="language-java">     &lt;uses-permission android:name=&quot;android.permission.CAMERA&quot;/&gt;
+</code></pre>
+<h2 id="2在layout的xml布局文件中布局好-surfaceview">2.在layout的xml布局文件中，布局好 SurfaceView</h2>
+<pre><code class="language-xml">   &lt;SurfaceView
+        android:id=&quot;@+id/surfaceview&quot;
+        android:layout_width=&quot;fill_parent&quot;
+        android:layout_height=&quot;fill_parent&quot; /&gt;
+</code></pre>
+<h2 id="3在activity文件中设置surfaceview的callback并打开camera进行图像预览">3.在Activity文件中，设置surfaceview的callback，并打开camera进行图像预览;</h2>
+<p><strong>注意</strong>: camera.addCallbackBuffer(data) 必须设置，否则 setPreviewCallbackWithBuffer()函数不会调用 onPreviewFrame();</p>
+<pre><code class="language-java">
+  private void initView(){
+      mSurfaceView = findViewById(R.id.surfaceView);
+      mSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+          @Override
+          public void surfaceCreated(SurfaceHolder holder) {
+              Log.i(&quot;tag&quot;,&quot;surfaceCreated&quot;);
+          }
+
+          @Override
+          public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+              Log.i(&quot;tag&quot;,&quot;surfaceChanged&quot;);
+
+              //打开camera，设置参数并进行预览
+              openCamera(holder);
+
+              // 获取 camera数据
+              if(mCamera!=null){
+                  byte[] data = new byte[mPreViewWidth * mPreViewHeight * 3 / 2];
+                  mCamera.addCallbackBuffer(data);
+                  mCamera.setPreviewCallbackWithBuffer(new Camera.PreviewCallback(){
+                      @Override
+                      public void onPreviewFrame(byte[] data, Camera camera) {
+                          Log.i(&quot;tag&quot;,&quot;onPreviewFrame&quot;);
+
+                          //取出数据进行编码
+
+                          //将buffer添加到到摄像头，重复利用==&gt; 否则不会重复调用  onPreviewFrame
+                          camera.addCallbackBuffer(data);
+                      }
+                  });
+              }
+          }
+
+          @Override
+          public void surfaceDestroyed(SurfaceHolder holder) {
+              Log.i(&quot;tag&quot;,&quot;surfaceDestroyed&quot;);
+          }
+      });
+  }
+</code></pre>
+<h2 id="用到的opencamera函数如下">用到的openCamera函数如下：</h2>
+<pre><code class="language-java">    //打开camera，设置参数并进行预览
+    public boolean openCamera(SurfaceHolder surfaceHolder){
+        boolean b = true;
+        try {
+            int cameraId = openCommonCamera();
+            mCamera.setPreviewDisplay(surfaceHolder);   //设置 camera的显示预览view
+            mDisplayOrientation = 90;                   // 设置display角度
+            mCamera.setDisplayOrientation(mDisplayOrientation);
+            setPameras();    //参数设置
+            mCamera.startPreview();  //启动preview
+        }catch (Exception e){
+            e.printStackTrace();
+            b = false;
+        }
+        return b;
+    }
+</code></pre>
+<p><strong>openCommonCamera函数如下：</strong></p>
+<pre><code class="language-java"> //打开camera
+ private int openCommonCamera(){
+     int cameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;  // 或后置摄像头    Camera.CameraInfo.CAMERA_FACING_BACK;
+     int numberOfCameras = Camera.getNumberOfCameras();
+     Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+     for (int i = 0; i &lt; numberOfCameras; i++) {
+         Camera.getCameraInfo(i, cameraInfo);
+         if (cameraInfo.facing == cameraId) {
+             mCamera = Camera.open(i);
+         }
+     }
+     return cameraId;
+ }
+</code></pre>
+<p><strong>setPameras函数如下：</strong></p>
+<pre><code class="language-java">// camera参数设置
+ private void setPameras(){
+     Camera.Size preViewSize = mCamera.new Size(mPreViewWidth,mPreViewHeight);  //设置 preview的大小
+
+     Camera.Parameters parameters = mCamera.getParameters();
+     parameters.setRotation( 90 );  // 设置camera角度
+     parameters.setPreviewFormat(ImageFormat.NV21);
+     parameters.setPreviewSize(preViewSize.width,preViewSize.height);
+
+     mPreviewSize = preViewSize;
+ }
+</code></pre>
+<h2 id="运行结果的打印信息如下">运行结果的打印信息如下：</h2>
+<figure data-type="image" tabindex="1"><img src="https://caoliyu-blog.github.io/post-images/1585107320244.png" alt="" loading="lazy"></figure>
+<h2 id="运行界面如下">运行界面如下:</h2>
+<figure data-type="image" tabindex="2"><img src="https://caoliyu-blog.github.io/post-images/1585107326431.png" alt="" loading="lazy"></figure>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://caoliyu-blog.github.io/post/android-get-screen-bps-dpi/" class="post-title gt-a-link">
+                    android获取屏幕分辨率的方法
+                </a>
+            </div>
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">学习工作过程中，碰到的常用问题记录，简单书写笔记</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    书写笔记，记录点滴  Powered by <a href="http://xiebj.net">caoliyu1086@163.com</a> | <a href="https://caoliyu-blog.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+
+
+    </div>
+</div>
+</body>
+</html>

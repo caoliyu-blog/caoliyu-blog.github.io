@@ -1,0 +1,211 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>一个功能强大的android图片加载开源库nostra13 / Android-Universal-Image-Loader | 写笔记</title>
+<link rel="shortcut icon" href="https://caoliyu-blog.github.io/favicon.ico?v=1585304154510">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<link rel="stylesheet" href="https://caoliyu-blog.github.io/styles/main.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<script src="media/scripts/index.js"></script>
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            写笔记
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
+</nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    一个功能强大的android图片加载开源库nostra13 / Android-Universal-Image-Loader
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-03-24 ·
+                    </time>
+                    
+                        <a href="https://caoliyu-blog.github.io/tag/android/" class="post-tags">
+                            # android
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>它是早期广泛使用的开源图片加载库，强大又灵活的Android库, 用于加载,缓存,显示图片。它支持http，本地sd卡，assets及drawable等常用的存储方式显示，甚至还支持直接指定 .mp4文件名来加截视频的简略图片显示。</p>
+<!-- more -->
+<h2 id="官方示例截图">官方示例截图:</h2>
+<p>本开源项目的github地址为： https://github.com/nostra13/Android-Universal-Image-Loader<br>
+官方示例截图如下:</p>
+<figure data-type="image" tabindex="1"><img src="https://caoliyu-blog.github.io/post-images/1585292734081.png" alt="示例截图" loading="lazy"></figure>
+<h2 id="特点">特点</h2>
+<pre><code>a.多线程图像加载(支持同步/或异步加载);
+b.各种自定义ImageLoader的配置（线程执行，下载，图片解析，内存/磁盘缓存，图片显示参数等）;
+c.多种自定义图像显示功能(缓存，解码，显示选项支持);
+d.图片内存/磁盘缓存支持(文件系统/或sd卡);
+e.下载回调函数支持(含下载进度)
+
+Android 2.0以上支持
+</code></pre>
+<h2 id="图片加载显示流程">图片加载显示流程:</h2>
+<figure data-type="image" tabindex="2"><img src="https://caoliyu-blog.github.io/post-images/1585292883696.png" alt="图片加载流程" loading="lazy"></figure>
+<h2 id="官方使用示例说明">官方使用示例说明：</h2>
+<h3 id="依赖库加入">依赖库加入</h3>
+<pre><code>implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+</code></pre>
+<h3 id="支持的url示例">支持的url示例</h3>
+<pre><code>&quot;http://site.com/image.png&quot; // from Web
+&quot;file:///mnt/sdcard/image.png&quot; // from SD card
+&quot;file:///mnt/sdcard/video.mp4&quot; // from SD card (video thumbnail)
+&quot;content://media/external/images/media/13&quot; // from content provider
+&quot;content://media/external/video/media/13&quot; // from content provider (video thumbnail)
+&quot;assets://image.png&quot; // from assets
+&quot;drawable://&quot; + R.drawable.img // from drawables (non-9patch images)
+</code></pre>
+<h3 id="示例">示例</h3>
+<pre><code class="language-java">
+// 获取单实例对象
+ImageLoader imageLoader = ImageLoader.getInstance(); 
+
+// 加载图片，解码到 bitmap并显示到 imageView中
+imageLoader.displayImage(imageUri, imageView);
+
+// 加载图片，解码到bitmap并回调加无完成
+imageLoader.loadImage(imageUri, new SimpleImageLoadingListener() {
+	@Override
+	public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+		// Do whatever you want with Bitmap
+	}
+});
+
+// 同步加载图片
+Bitmap bmp = imageLoader.loadImageSync(imageUri);
+</code></pre>
+<h2 id="本开源的库的license声明">本开源的库的License声明</h2>
+<pre><code>Copyright 2011-2015 Sergey Tarasevich
+
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://caoliyu-blog.github.io/post/android-camera-preview-and-get-data/" class="post-title gt-a-link">
+                    android 摄像头采集和预览实现方法
+                </a>
+            </div>
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">学习工作过程中，碰到的常用问题记录，简单书写笔记</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    书写笔记，记录点滴  Powered by <a href="http://xiebj.net">caoliyu1086@163.com</a> | <a href="https://caoliyu-blog.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+
+
+    </div>
+</div>
+</body>
+</html>

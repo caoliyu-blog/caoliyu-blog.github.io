@@ -1,0 +1,282 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>centos7.6服务器基本环境配置(网络,tftp,mysql) | 写笔记</title>
+<link rel="shortcut icon" href="https://caoliyu-blog.github.io/favicon.ico?v=1585304154510">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<link rel="stylesheet" href="https://caoliyu-blog.github.io/styles/main.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<script src="media/scripts/index.js"></script>
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            写笔记
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
+</nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    centos7.6服务器基本环境配置(网络,tftp,mysql)
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-03-25 ·
+                    </time>
+                    
+                        <a href="https://caoliyu-blog.github.io/tag/linux/" class="post-tags">
+                            # linux
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>centos系统经常用于当作web服务器，而要使用它最基本的就是配置网络，tftp传文件，及搭建mysql服务器等基本功能。</p>
+<!-- more -->
+<h2 id="配置网络">配置网络</h2>
+<p>刚安装完服务器后，无 ifconfig工具，要手动配置网络，操作方法如下：</p>
+<pre><code class="language-sh">// 查看有哪些网络设备  (lo    eth0等)
+# cat /proc/net/dev 
+
+
+//配置网络设备开机启动网络 (网络节点对应 /proc/net/dev 中的节点)
+# vi /etc/sysconfig/network-scripts/ifcfg-eth0
+---------------------------
+ 把其中的 onboot  no 改成
+         onboot  yes
+---------------------------
+改完后重启下网络，用下面命令：
+# service network restart
+然后试着 ping 下 114.114.114.114
+# ping 114.114.114.114
+
+如果成功了，可以进行后续的安装了
+</code></pre>
+<h2 id="配置网络-dhcp静态ip">配置网络 (dhcp/静态ip)</h2>
+<pre><code># vi /etc/sysconfig/network-scripts/ifcfg-eth0
+  -----------dhcp方式时---------
+  BOOTPROTO=dhcp
+  ------------------------------
+  
+  -----------静态ip方式时---------
+  BOOTPROTO=static  
+  IPADDR=192.168.0.116  
+  NETMASK=255.255.255.0  
+  GATEWAY=192.168.0.115  
+  DNS1=114.114.114.114  
+  DNS2=8.8.8.8  
+  ------------------------------
+  
+改完后重启下网络，用下面命令：
+# service network restart
+然后试着 ping 下 114.114.114.114
+# ping 114.114.114.114
+
+</code></pre>
+<h2 id="安装rz-sz工具">安装rz  sz工具</h2>
+<pre><code># yum install lrzsz
+</code></pre>
+<h2 id="安装-ifconfig网络工具">安装 ifconfig网络工具</h2>
+<pre><code># yum search ifconfig               // 查找 ifconfig所在的库
+# yum install net-tools.x86_64      // 安装上面命令找到的  net-tools库 
+  一路按  y  确认安装，当出现 Complete!时，表示安装成功，后面就可以使用 ifconfig命令了
+# ifconfig
+</code></pre>
+<h2 id="centos安装ssh服务">centos安装ssh服务</h2>
+<pre><code># rpm -qa | grep ssh   #查看是否安装 ssh
+# yum install openssh-server    #若未安装，则进行安装
+# service sshd restart    #重启sshd
+# netstat -antp | grep sshd 查看是否启动22端口
+</code></pre>
+<h2 id="mysql-5643安装">mysql 5.6.43安装</h2>
+<h3 id="1-下载-mysql-yum-repository"><strong>1 下载 MySQL Yum Repository</strong></h3>
+<pre><code>wget http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
+</code></pre>
+<p>或者本地下载好 <code>mysql-community-release-el7-5.noarch.rpm</code>，通过 <code>rz</code> 命令传到服务器上</p>
+<h3 id="2安装mysql">2.安装mysql</h3>
+<p><strong>添加 MySQL Yum Repository</strong></p>
+<pre><code>rpm -ivh mysql-community-release-el7-5.noarch.rpm
+</code></pre>
+<p><strong>验证下是否添加成功</strong></p>
+<pre><code>yum repolist enabled | grep &quot;mysql.*-community.*&quot;
+</code></pre>
+<p><strong>选择要启用 MySQL 版本</strong></p>
+<p>查看 MySQL 版本，执行yum repolist all | grep mysql<br>
+可以看到 5.5， 5.7 版本是默认禁用的，因为现在最新的稳定版是 5.6</p>
+<p>可以通过类似下面的语句来启动某些版本<br>
+yum-config-manager --disable mysql56-community<br>
+yum-config-manager --enable mysql57-community-dmr</p>
+<p><strong>通过 Yum 来安装 MySQL</strong></p>
+<pre><code>yum install mysql-community-server
+</code></pre>
+<p><strong>启动/停止mysql</strong></p>
+<pre><code>service  mysql start
+service  mysql stop
+service  mysql restart
+</code></pre>
+<p><strong>设置字符集</strong></p>
+<p>一般的，为了支持中文，我们应该讲字符集设为 UTF-8， 执行下面命令查看当前 MySQL 字符集<br>
+SHOW VARIABLES LIKE 'character%';</p>
+<p>修改 /etc/my.cnf 文件，添加字符集的设置</p>
+<p>[mysqld]<br>
+character_set_server = utf8</p>
+<p>[mysql]<br>
+default-character-set = utf8</p>
+<p>重启 MySQL ,可以看到字符集已经修改了</p>
+<p><strong>查看字符集</strong></p>
+<blockquote>
+<p>show VARIABLES like 'character%';</p>
+</blockquote>
+<h3 id="3-mysql基础环境设置基本使用命令">3 mysql基础环境设置，基本使用命令</h3>
+<p><strong>MySQL常用命令</strong></p>
+<blockquote>
+<p>show VARIABLES like 'character%';    查看字符集<br>
+show databases;       查看数据库<br>
+create database name; 创建数据库<br>
+use databasename; 选择数据库<br>
+drop database name 直接删除数据库，不提醒<br>
+show tables; 显示表<br>
+describe tablename; 表的详细描述<br>
+select 中加上distinct去除重复字段<br>
+mysqladmin drop databasename 删除数据库前，有提示。<br>
+显示当前mysql版本和当前日期<br>
+select version(),current_date;</p>
+</blockquote>
+<p><strong>修改mysql中root的密码</strong></p>
+<blockquote>
+<p>shell&gt;mysql -u root -p        //使用密码登入mysql<br>
+mysql&gt; update user set password=password(”xueok654123″) where user=’root’;<br>
+mysql&gt; flush privileges //刷新数据库<br>
+mysql&gt;use dbname； 打开数据库：<br>
+mysql&gt;show databases; 显示所有数据库<br>
+mysql&gt;show tables; 显示数据库mysql中所有的表：先use mysql；然后<br>
+mysql&gt;describe user; 显示表mysql数据库中user表的列信息）；</p>
+</blockquote>
+<h3 id="4-数据库备份恢复命令">4 数据库备份/恢复命令</h3>
+<p><strong>1.mysql备份命令如下:</strong></p>
+<p>不加 -d:导出所有</p>
+<blockquote>
+<p>/usr/local/mysql/bin/mysqldump --u root -h 127.0.0.1 -proot  -P3306  tao_server &gt; taoserver_mysql_struct-record.sql</p>
+</blockquote>
+<p>加 -d：不导出表结构</p>
+<blockquote>
+<p>/usr/local/mysql/bin/mysqldump --u root -h 127.0.0.1 -proot  -P3306 -d tao_server &gt; taoserver_mysql_struct-only.sql</p>
+</blockquote>
+<p>2.mysql恢复命令如下:**</p>
+<blockquote>
+<p>/usr/local/mysql/bin/mysql -uroot -proot tao_server_restore &lt; taoserver_mysql_struct-record.sql</p>
+</blockquote>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://caoliyu-blog.github.io/post/vmware-install-centos76/" class="post-title gt-a-link">
+                    vmware安装centos7.6方法
+                </a>
+            </div>
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">学习工作过程中，碰到的常用问题记录，简单书写笔记</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    书写笔记，记录点滴  Powered by <a href="http://xiebj.net">caoliyu1086@163.com</a> | <a href="https://caoliyu-blog.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+
+
+    </div>
+</div>
+</body>
+</html>

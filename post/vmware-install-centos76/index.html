@@ -1,0 +1,193 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>vmware安装centos7.6方法 | 写笔记</title>
+<link rel="shortcut icon" href="https://caoliyu-blog.github.io/favicon.ico?v=1585304154510">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<link rel="stylesheet" href="https://caoliyu-blog.github.io/styles/main.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<script src="media/scripts/index.js"></script>
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            写笔记
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
+</nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    vmware安装centos7.6方法
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2020-03-25 ·
+                    </time>
+                    
+                        <a href="https://caoliyu-blog.github.io/tag/linux/" class="post-tags">
+                            # linux
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="下载centos76镜像安装盘">下载centos7.6镜像安装盘：</h2>
+<p>国内用户可以直接使用阿里云的镜像服务器下载，地址如下：</p>
+<pre><code class="language-http">http://mirrors.aliyun.com/centos/7.6.1810/isos/x86_64/
+
+=============================================
+打开上面地址后，会看到下面的文件列表，如下所示:
+=============================================
+../
+0_README.txt                                       01-Dec-2018 13:21                2495
+CentOS-7-x86_64-DVD-1810.iso                       25-Nov-2018 23:55          4588568576
+CentOS-7-x86_64-DVD-1810.torrent                   03-Dec-2018 15:03               88027
+CentOS-7-x86_64-Everything-1810.iso                26-Nov-2018 14:28         10743709696
+CentOS-7-x86_64-Everything-1810.torrent            03-Dec-2018 15:03              102990
+CentOS-7-x86_64-LiveGNOME-1810.iso                 24-Nov-2018 17:41          1474297856
+CentOS-7-x86_64-LiveGNOME-1810.torrent             03-Dec-2018 15:03               28645
+CentOS-7-x86_64-LiveKDE-1810.iso                   24-Nov-2018 17:53          1949302784
+CentOS-7-x86_64-LiveKDE-1810.torrent               03-Dec-2018 15:03               37699
+CentOS-7-x86_64-Minimal-1810.iso                   25-Nov-2018 21:25           962592768
+CentOS-7-x86_64-Minimal-1810.torrent               03-Dec-2018 15:03               37237
+CentOS-7-x86_64-NetInstall-1810.iso                25-Nov-2018 16:21           531628032
+CentOS-7-x86_64-NetInstall-1810.torrent            03-Dec-2018 15:03               20806
+sha256sum.txt                                      01-Dec-2018 13:16                 598
+sha256sum.txt.asc                                  03-Dec-2018 14:50                1458
+</code></pre>
+<p>下载其中的 DVD版本用于安装：<code>CentOS-7.6-x86_64-DVD-1810.iso</code></p>
+<h2 id="在vmware中安装centos">在vmware中安装centos</h2>
+<ol>
+<li>打开vmware,选择菜单: <code>文件/新建</code>，  会弹出一个新建对话框【<code>选择安装方式</code>】；</li>
+<li>在【<code>选择安装方式</code>】对话框中，将下载的<code>CentOS-7.6-x86_64-DVD-1810.iso</code> 拖到 【<code>从光盘或映像中安装</code>】中, 然后点击 【<code>继续</code>】键键；</li>
+<li>点击【<code>自定义设置</code>】可以配置虚拟机使用的硬盘容易、内存、cpu、声音等硬件设备，  设置完后点击【<code>完成</code>】,进入后续的实际安装过程；</li>
+<li>启动虚拟机，会出现如下图示安装页面，选择 (<code>Install CentOS 7</code>)，然后按 Enter键，进入安装流程;</li>
+</ol>
+<figure data-type="image" tabindex="1"><img src="https://caoliyu-blog.github.io/post-images/image-20190403110539216.png" alt="image-20190403110539216" loading="lazy"></figure>
+<ol start="5">
+<li>
+<p>选择安装语言 【简体中文】，然后进入(安装信息摘要)，在此界面可进行安装包配置、安装盘分配等操作， 我们都用默认的就可以了，如下图示:</p>
+<figure data-type="image" tabindex="2"><img src="https://caoliyu-blog.github.io/post-images/image-20190403111132120.png" alt="image-20190403111132120" loading="lazy"></figure>
+</li>
+<li>
+<p>点击【开始安装】，进入具体的安装过程，设置 root密码， 创建用户,   然后等待安装完成， 安装完成后有个【重启】按键，点击下就重启系统；</p>
+</li>
+<li>
+<p>重启后进入系统，然后输入 用户名/密码，就可以进入系统使用了;</p>
+<figure data-type="image" tabindex="3"><img src="https://caoliyu-blog.github.io/post-images/image-20190403113126966.png" alt="image-20190403113126966" loading="lazy"></figure>
+</li>
+</ol>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://caoliyu-blog.github.io/post/android-camera-preview-with-round-preview/" class="post-title gt-a-link">
+                    android 摄像头圆形预览方式实现
+                </a>
+            </div>
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">学习工作过程中，碰到的常用问题记录，简单书写笔记</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    书写笔记，记录点滴  Powered by <a href="http://xiebj.net">caoliyu1086@163.com</a> | <a href="https://caoliyu-blog.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+
+
+    </div>
+</div>
+</body>
+</html>

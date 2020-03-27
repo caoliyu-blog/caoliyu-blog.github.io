@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://caoliyu-blog.github.io</id>
+    <title>写笔记</title>
+    <updated>2020-03-27T10:16:43.485Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://caoliyu-blog.github.io"/>
+    <link rel="self" href="https://caoliyu-blog.github.io/atom.xml"/>
+    <subtitle>学习工作过程中，碰到的常用问题记录，简单书写笔记</subtitle>
+    <logo>https://caoliyu-blog.github.io/images/avatar.png</logo>
+    <icon>https://caoliyu-blog.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2020, 写笔记</rights>
+    <entry>
+        <title type="html"><![CDATA[GridView实现内部item高度的加载时动态调节(根据count个数决定显示几行)]]></title>
+        <id>https://caoliyu-blog.github.io/post/gridview-adjust-item-size/</id>
+        <link href="https://caoliyu-blog.github.io/post/gridview-adjust-item-size/">
+        </link>
+        <updated>2020-03-27T11:09:05.000Z</updated>
+        <summary type="html"><![CDATA[<p>GridView内部item高度的动态调节实现，一般情况在知道 gridview总高度时， android系统会自动去适配调整，但是界面会挤在上端，没有办法实现自动整个平铺开来，导致界面不是我们想要的结果。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>GridView内部item高度的动态调节实现，一般情况在知道 gridview总高度时， android系统会自动去适配调整，但是界面会挤在上端，没有办法实现自动整个平铺开来，导致界面不是我们想要的结果。</p>
+<!-- more -->
+<h2 id="延用网络上-csdn类似的问题描述如下">延用网络上 csdn类似的问题描述如下：</h2>
+<p>如：想要的结果为：<br>
+<img src="https://caoliyu-blog.github.io/post-images/1585295314815.png" alt="" loading="lazy"><br>
+而用android自带的实现效果，出来的结果却时：<br>
+<img src="https://caoliyu-blog.github.io/post-images/1585295338974.png" alt="" loading="lazy"></p>
+<p>这时我们可以通过在Adapter的 getView()中通过setLayoutParams() 来调节内部的 item高度:</p>
+<h2 id="实现代码如下">实现代码如下：</h2>
+<pre><code class="language-java">			//自动调节好 item 高度
+			AbsListView.LayoutParams param = new AbsListView.LayoutParams(
+					android.view.ViewGroup.LayoutParams.FILL_PARENT,
+					mGridView.getHeight()/linenum);//传入自己需要的宽高
+			view.setLayoutParams(param);
+</code></pre>
+<p>其中 view为getView()中的viewGroup,而 linenum为根据数据项多少，计算出来的要显示几行数据，它通过在getCount中先计算出来。</p>
+<h2 id="更完整的实现代码如下">更完整的实现代码如下：</h2>
+<pre><code class="language-java">	class ListAdapter extends BaseAdapter {
+		private int linenum = 1;
+		@Override
+		public int getCount() {
+			int count = mListData.size();
+			linenum = (count+3)/4;
+			return count;
+		}
+        
+        @Override
+		public View getView(final int position, View convertView, ViewGroup parent) {
+			View view = YaoTouPiaoSelectActivity.this.getLayoutInflater().inflate(R.layout.item_dt_yao_tou_piao, null);
+
+			//自动调节好 item 高度
+			AbsListView.LayoutParams param = new AbsListView.LayoutParams(
+					android.view.ViewGroup.LayoutParams.FILL_PARENT,
+					mGridView.getHeight()/linenum);//传入自己需要的宽高
+			view.setLayoutParams(param);
+
+
+            //... 其它代码部分
+		}
+
+// ...其它部分代码
+}
+</code></pre>
+<h2 id="实现结果如下">实现结果如下</h2>
+<p>当数据显示为2行时，它把整个的gridview高度的一半用作item高度：<br>
+<img src="https://caoliyu-blog.github.io/post-images/1585295792872.png" alt="" loading="lazy"><br>
+而当数据显示为1行时，它自动把整个 gridview当作item的高度<br>
+<img src="https://caoliyu-blog.github.io/post-images/1585295865175.png" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
+</feed>
