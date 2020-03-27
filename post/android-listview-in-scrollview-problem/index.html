@@ -4,9 +4,9 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>android的scrollView内部加入listView的方法 | 写笔记</title>
-<link rel="shortcut icon" href="http://www.xiebj.cn//favicon.ico?v=1585318432349">
+<link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585321331376">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
-<link rel="stylesheet" href="http://www.xiebj.cn//styles/main.css">
+<link rel="stylesheet" href="http://114.55.209.43/styles/main.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
@@ -94,7 +94,7 @@
                         · 2020-03-26 ·
                     </time>
                     
-                        <a href="http://www.xiebj.cn/tag/android/" class="post-tags">
+                        <a href="http://114.55.209.43/tag/android/" class="post-tags">
                             # android
                         </a>
                     
@@ -103,7 +103,7 @@
                     <p>在ScollView中加入ListView会出问题，因为ListView已经自带滚动效果，如果把ListView放到ScrollView中，里面的listView <strong>高度无法计算出来</strong> 一般显示时只会显示ListView的第一项；</p>
 <!-- more -->
 <p>我们可以重写 ListView的 onMeasure()方法，即可解决这个问题:<br>
-<img src="http://www.xiebj.cn//post-images/1585293805180.png" alt="重写onMeasure方法" loading="lazy"></p>
+<img src="http://114.55.209.43/post-images/1585293805180.png" alt="重写onMeasure方法" loading="lazy"></p>
 <h2 id="代码如下">代码如下：</h2>
 <pre><code class="language-java">    /**
      * 只需要重写这个方法即可
@@ -157,7 +157,7 @@ public class ListViewForScrollView extends ListView {
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="http://www.xiebj.cn/post/image-not-catched-if-token-change/" class="post-title gt-a-link">
+                <a href="http://114.55.209.43/post/image-not-catched-if-token-change/" class="post-title gt-a-link">
                     android图片加载com.nostra13.universalimageloader库,token变化了图片不缓存问题
                 </a>
             </div>
@@ -182,7 +182,7 @@ public class ListViewForScrollView extends ListView {
             
         
     </div>
-    书写笔记，记录点滴  Powered by <a href="http://xiebj.net">caoliyu1086@163.com</a> | <a href="http://www.xiebj.cn//atom.xml" target="_blank">RSS</a>
+    书写笔记，记录点滴  Powered by <a href="http://xiebj.net">caoliyu1086@163.com</a> | <a href="http://114.55.209.43/atom.xml" target="_blank">RSS</a>
 </div>
 
 <script>

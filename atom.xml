@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>http://www.xiebj.cn/</id>
+    <id>http://114.55.209.43</id>
     <title>写笔记</title>
-    <updated>2020-03-27T14:14:13.261Z</updated>
+    <updated>2020-03-27T15:02:14.113Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="http://www.xiebj.cn/"/>
-    <link rel="self" href="http://www.xiebj.cn/atom.xml"/>
+    <link rel="alternate" href="http://114.55.209.43"/>
+    <link rel="self" href="http://114.55.209.43/atom.xml"/>
     <subtitle>学习工作过程中，碰到的常用问题记录，简单书写笔记</subtitle>
-    <logo>http://www.xiebj.cn/images/avatar.png</logo>
-    <icon>http://www.xiebj.cn/favicon.ico</icon>
+    <logo>http://114.55.209.43/images/avatar.png</logo>
+    <icon>http://114.55.209.43/favicon.ico</icon>
     <rights>All rights reserved 2020, 写笔记</rights>
     <entry>
         <title type="html"><![CDATA[GridView实现内部item高度的加载时动态调节(根据count个数决定显示几行)]]></title>
-        <id>http://www.xiebj.cn/post/gridview-adjust-item-size/</id>
-        <link href="http://www.xiebj.cn/post/gridview-adjust-item-size/">
+        <id>http://114.55.209.43/post/gridview-adjust-item-size/</id>
+        <link href="http://114.55.209.43/post/gridview-adjust-item-size/">
         </link>
         <updated>2020-03-27T11:09:05.000Z</updated>
         <summary type="html"><![CDATA[<p>GridView内部item高度的动态调节实现，一般情况在知道 gridview总高度时， android系统会自动去适配调整，但是界面会挤在上端，没有办法实现自动整个平铺开来，导致界面不是我们想要的结果。</p>
@@ -22,9 +22,9 @@
 <!-- more -->
 <h2 id="延用网络上-csdn类似的问题描述如下">延用网络上 csdn类似的问题描述如下：</h2>
 <p>如：想要的结果为：<br>
-<img src="http://www.xiebj.cn//post-images/1585295314815.png" alt="" loading="lazy"><br>
+<img src="http://114.55.209.43/post-images/1585295314815.png" alt="" loading="lazy"><br>
 而用android自带的实现效果，出来的结果却时：<br>
-<img src="http://www.xiebj.cn//post-images/1585295338974.png" alt="" loading="lazy"></p>
+<img src="http://114.55.209.43/post-images/1585295338974.png" alt="" loading="lazy"></p>
 <p>这时我们可以通过在Adapter的 getView()中通过setLayoutParams() 来调节内部的 item高度:</p>
 <h2 id="实现代码如下">实现代码如下：</h2>
 <pre><code class="language-java">			//自动调节好 item 高度
@@ -63,9 +63,9 @@
 </code></pre>
 <h2 id="实现结果如下">实现结果如下</h2>
 <p>当数据显示为2行时，它把整个的gridview高度的一半用作item高度：<br>
-<img src="http://www.xiebj.cn//post-images/1585295792872.png" alt="" loading="lazy"><br>
+<img src="http://114.55.209.43/post-images/1585295792872.png" alt="" loading="lazy"><br>
 而当数据显示为1行时，它自动把整个 gridview当作item的高度<br>
-<img src="http://www.xiebj.cn//post-images/1585295865175.png" alt="" loading="lazy"></p>
+<img src="http://114.55.209.43/post-images/1585295865175.png" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>
