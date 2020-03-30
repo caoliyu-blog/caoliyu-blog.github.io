@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>android 摄像头采集和预览实现方法 | 写笔记</title>
-<link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585561669733">
+<link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585562466243">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="http://114.55.209.43/styles/main.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -108,71 +108,71 @@
 <pre><code class="language-java">     &lt;uses-permission android:name=&quot;android.permission.CAMERA&quot;/&gt;
 </code></pre>
 <h2 id="2在layout的xml布局文件中布局好-surfaceview">2.在layout的xml布局文件中，布局好 SurfaceView</h2>
-<pre><code class="language-xml">   &lt;SurfaceView
-        android:id=&quot;@+id/surfaceview&quot;
-        android:layout_width=&quot;fill_parent&quot;
-        android:layout_height=&quot;fill_parent&quot; /&gt;
+<pre><code class="language-xml">&lt;SurfaceView
+    android:id=&quot;@+id/surfaceview&quot;
+    android:layout_width=&quot;fill_parent&quot;
+    android:layout_height=&quot;fill_parent&quot; /&gt;
 </code></pre>
 <h2 id="3在activity文件中设置surfaceview的callback并打开camera进行图像预览">3.在Activity文件中，设置surfaceview的callback，并打开camera进行图像预览;</h2>
 <p><strong>注意</strong>: camera.addCallbackBuffer(data) 必须设置，否则 setPreviewCallbackWithBuffer()函数不会调用 onPreviewFrame();</p>
 <pre><code class="language-java">
-  private void initView(){
-      mSurfaceView = findViewById(R.id.surfaceView);
-      mSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-          @Override
-          public void surfaceCreated(SurfaceHolder holder) {
-              Log.i(&quot;tag&quot;,&quot;surfaceCreated&quot;);
+private void initView(){
+  mSurfaceView = findViewById(R.id.surfaceView);
+  mSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+      @Override
+      public void surfaceCreated(SurfaceHolder holder) {
+          Log.i(&quot;tag&quot;,&quot;surfaceCreated&quot;);
+      }
+
+      @Override
+      public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+          Log.i(&quot;tag&quot;,&quot;surfaceChanged&quot;);
+
+          //打开camera，设置参数并进行预览
+          openCamera(holder);
+
+          // 获取 camera数据
+          if(mCamera!=null){
+              byte[] data = new byte[mPreViewWidth * mPreViewHeight * 3 / 2];
+              mCamera.addCallbackBuffer(data);
+              mCamera.setPreviewCallbackWithBuffer(new Camera.PreviewCallback(){
+                  @Override
+                  public void onPreviewFrame(byte[] data, Camera camera) {
+                      Log.i(&quot;tag&quot;,&quot;onPreviewFrame&quot;);
+
+                      //取出数据进行编码
+
+                      //将buffer添加到到摄像头，重复利用==&gt; 否则不会重复调用  onPreviewFrame
+                      camera.addCallbackBuffer(data);
+                  }
+              });
           }
+      }
 
-          @Override
-          public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-              Log.i(&quot;tag&quot;,&quot;surfaceChanged&quot;);
-
-              //打开camera，设置参数并进行预览
-              openCamera(holder);
-
-              // 获取 camera数据
-              if(mCamera!=null){
-                  byte[] data = new byte[mPreViewWidth * mPreViewHeight * 3 / 2];
-                  mCamera.addCallbackBuffer(data);
-                  mCamera.setPreviewCallbackWithBuffer(new Camera.PreviewCallback(){
-                      @Override
-                      public void onPreviewFrame(byte[] data, Camera camera) {
-                          Log.i(&quot;tag&quot;,&quot;onPreviewFrame&quot;);
-
-                          //取出数据进行编码
-
-                          //将buffer添加到到摄像头，重复利用==&gt; 否则不会重复调用  onPreviewFrame
-                          camera.addCallbackBuffer(data);
-                      }
-                  });
-              }
-          }
-
-          @Override
-          public void surfaceDestroyed(SurfaceHolder holder) {
-              Log.i(&quot;tag&quot;,&quot;surfaceDestroyed&quot;);
-          }
-      });
-  }
+      @Override
+      public void surfaceDestroyed(SurfaceHolder holder) {
+          Log.i(&quot;tag&quot;,&quot;surfaceDestroyed&quot;);
+      }
+  });
+}
 </code></pre>
 <h2 id="用到的opencamera函数如下">用到的openCamera函数如下：</h2>
-<pre><code class="language-java">    //打开camera，设置参数并进行预览
-    public boolean openCamera(SurfaceHolder surfaceHolder){
-        boolean b = true;
-        try {
-            int cameraId = openCommonCamera();
-            mCamera.setPreviewDisplay(surfaceHolder);   //设置 camera的显示预览view
-            mDisplayOrientation = 90;                   // 设置display角度
-            mCamera.setDisplayOrientation(mDisplayOrientation);
-            setPameras();    //参数设置
-            mCamera.startPreview();  //启动preview
-        }catch (Exception e){
-            e.printStackTrace();
-            b = false;
-        }
-        return b;
+<pre><code class="language-java">//打开camera，设置参数并进行预览
+public boolean openCamera(SurfaceHolder surfaceHolder){
+    boolean b = true;
+    try {
+        int cameraId = openCommonCamera();
+        mCamera.setPreviewDisplay(surfaceHolder);   //设置 camera的显示预览view
+        mDisplayOrientation = 90;                   // 设置display角度
+        mCamera.setDisplayOrientation(mDisplayOrientation);
+        setPameras();    //参数设置
+        mCamera.startPreview();  //启动preview
+    }catch (Exception e){
+        e.printStackTrace();
+        b = false;
     }
+    return b;
+}
 </code></pre>
 <p><strong>openCommonCamera函数如下：</strong></p>
 <pre><code class="language-java"> //打开camera
@@ -191,16 +191,16 @@
 </code></pre>
 <p><strong>setPameras函数如下：</strong></p>
 <pre><code class="language-java">// camera参数设置
- private void setPameras(){
-     Camera.Size preViewSize = mCamera.new Size(mPreViewWidth,mPreViewHeight);  //设置 preview的大小
+private void setPameras(){
+ Camera.Size preViewSize = mCamera.new Size(mPreViewWidth,mPreViewHeight);  //设置 preview的大小
 
-     Camera.Parameters parameters = mCamera.getParameters();
-     parameters.setRotation( 90 );  // 设置camera角度
-     parameters.setPreviewFormat(ImageFormat.NV21);
-     parameters.setPreviewSize(preViewSize.width,preViewSize.height);
+ Camera.Parameters parameters = mCamera.getParameters();
+ parameters.setRotation( 90 );  // 设置camera角度
+ parameters.setPreviewFormat(ImageFormat.NV21);
+ parameters.setPreviewSize(preViewSize.width,preViewSize.height);
 
-     mPreviewSize = preViewSize;
- }
+ mPreviewSize = preViewSize;
+}
 </code></pre>
 <h2 id="运行结果的打印信息如下">运行结果的打印信息如下：</h2>
 <figure data-type="image" tabindex="1"><img src="http://114.55.209.43/post-images/1585107320244.png" alt="" loading="lazy"></figure>

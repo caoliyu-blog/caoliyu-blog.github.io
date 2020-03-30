@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>android获取屏幕分辨率的方法 | 写笔记</title>
-<link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585561669733">
+<link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585562466243">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="http://114.55.209.43/styles/main.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -103,14 +103,14 @@
                     <p>android可以通过DisplayMetrics来获取屏幕分辨率，dpi等参数</p>
 <!-- more -->
 <p><strong>实现代码如下：</strong></p>
-<pre><code class="language-java">    DisplayMetrics dm = new DisplayMetrics(); 
-    dm = this.getApplicationContext().getResources().getDisplayMetrics(); 
-    int screenWidth = dm.widthPixels;       //实际像素宽 (px)
-    int screenHeight = dm.heightPixels;    //实际像素高 (px)
-    float density = dm.density;                //屏幕密度(每一个逻辑区域的px数)
-    float dpi = dm.densityDpi;                // 屏幕的 dpi   (像素/英寸)
-    int screenLogicWidth = dm.widthPixels/dm.density;      //逻辑宽
-    int screenLogicHeight = dm.heightPixels/dm.density;    //逻辑高
+<pre><code class="language-java">DisplayMetrics dm = new DisplayMetrics(); 
+dm = this.getApplicationContext().getResources().getDisplayMetrics(); 
+int screenWidth = dm.widthPixels;       //实际像素宽 (px)
+int screenHeight = dm.heightPixels;    //实际像素高 (px)
+float density = dm.density;                //屏幕密度(每一个逻辑区域的px数)
+float dpi = dm.densityDpi;                // 屏幕的 dpi   (像素/英寸)
+int screenLogicWidth = dm.widthPixels/dm.density;      //逻辑宽
+int screenLogicHeight = dm.heightPixels/dm.density;    //逻辑高
 </code></pre>
 <p><strong>各参数说明如下：</strong><br>
 a. dm.widthPixels,  dm.heightPixels 表示屏幕的实际 px (物理像素);<br>

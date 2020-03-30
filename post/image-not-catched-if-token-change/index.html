@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>android图片加载com.nostra13.universalimageloader库,token变化了图片不缓存问题 | 写笔记</title>
-<link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585561669733">
+<link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585562466243">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="http://114.55.209.43/styles/main.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -104,12 +104,12 @@
 <!-- more -->
 <p>图片加载的开源库地址：https://github.com/nostra13/Android-Universal-Image-Loader</p>
 <p>例如，以下俩张图片只是token变化了，实际它的图片内容还是不变的。</p>
-<pre><code>    http://www.xiebj.cn/display_image.jpg?token=af30923144566
-    http://www.xiebj.cn/display_image.jpg?token=cdfefe980ad89
+<pre><code>http://www.xiebj.cn/display_image.jpg?token=af30923144566
+http://www.xiebj.cn/display_image.jpg?token=cdfefe980ad89
 </code></pre>
 <p>如果使用默认的</p>
-<pre><code class="language-java">	config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
-	config.diskCacheFileNameGenerator(new HashCodeFileNameGenerator());
+<pre><code class="language-java">config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
+config.diskCacheFileNameGenerator(new HashCodeFileNameGenerator());
 </code></pre>
 <p>方法来设置，则它不会重用原来的缓存，而是当成新的图片来请求了。</p>
 <h2 id="原来的默认不缓存代码">原来的默认不缓存代码：</h2>
@@ -146,20 +146,20 @@ private void initImageLoader(Context context) {
 <p>贴的代码如下：</p>
 <pre><code class="language-java">
 // 重写 generate方法， 把 ?后面的参数给去除掉，使 token变化了文件还能缓存
-    FileNameGenerator generator = new Md5FileNameGenerator(){
-			@Override
-			public String generate(String s) {
-				int index = s.indexOf(&quot;?&quot;);
-				if(index&gt;0){
-					s = s.substring(0,index);
-				}
-				String s_ret = super.generate(s);
+FileNameGenerator generator = new Md5FileNameGenerator(){
+    @Override
+    public String generate(String s) {
+        int index = s.indexOf(&quot;?&quot;);
+        if(index&gt;0){
+            s = s.substring(0,index);
+        }
+        String s_ret = super.generate(s);
 
-				return s_ret;
-			}
-		};
+        return s_ret;
+    }
+};
 
-	config.diskCacheFileNameGenerator(generator);
+config.diskCacheFileNameGenerator(generator);
 </code></pre>
 
                 </div>

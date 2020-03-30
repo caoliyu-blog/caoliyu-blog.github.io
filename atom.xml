@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://114.55.209.43</id>
     <title>写笔记</title>
-    <updated>2020-03-30T09:54:32.342Z</updated>
+    <updated>2020-03-30T10:01:10.218Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://114.55.209.43"/>
     <link rel="self" href="http://114.55.209.43/atom.xml"/>
@@ -30,19 +30,19 @@
 }
 </code></pre>
 <h2 id="调用方式如下">调用方式如下:</h2>
-<pre><code class="language-c">    [self loadWkWebView:@&quot;https://www.baidu.com/&quot; ];  // https能正常工作
-    //[self loadWkWebView:@&quot;http://www.xiebj.cn/&quot; ];  // 默认http会因为安全原因被拦截
+<pre><code class="language-c">[self loadWkWebView:@&quot;https://www.baidu.com/&quot; ];  // https能正常工作
+//[self loadWkWebView:@&quot;http://www.xiebj.cn/&quot; ];  // 默认http会因为安全原因被拦截
 </code></pre>
 <h2 id="解决方法">解决方法：</h2>
 <p>在 info.plist文件中，新增 App Transport Security Settings 字典，并加入 Allow Arbitrary Loads  值为 YES<br>
 截图如下：<br>
 <img src="http://114.55.209.43/post-images/1585560959038.png" alt="App Transport Security Settings" loading="lazy"></p>
 <p>修改 info.plist后实际 加入内容如下：</p>
-<pre><code class="language-xml">   &lt;key&gt;NSAppTransportSecurity&lt;/key&gt;
-   &lt;dict&gt;
-       &lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;
-       &lt;true/&gt;
-   &lt;/dict&gt;
+<pre><code class="language-xml">&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;
+&lt;dict&gt;
+   &lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;
+   &lt;true/&gt;
+&lt;/dict&gt;
 </code></pre>
 <p>修改后运行结果如下：<br>
 <img src="http://114.55.209.43/post-images/1585561251667.png" alt="加入NSAppTransportSecurity后能加载http了" loading="lazy"></p>

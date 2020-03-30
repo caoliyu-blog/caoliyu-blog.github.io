@@ -4,7 +4,7 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>GridView实现内部item高度的加载时动态调节(根据count个数决定显示几行) | 写笔记</title>
-<link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585561669733">
+<link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585562466243">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="http://114.55.209.43/styles/main.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -109,36 +109,36 @@
 <img src="http://114.55.209.43/post-images/1585295338974.png" alt="" loading="lazy"></p>
 <p>这时我们可以通过在Adapter的 getView()中通过setLayoutParams() 来调节内部的 item高度:</p>
 <h2 id="实现代码如下">实现代码如下：</h2>
-<pre><code class="language-java">			//自动调节好 item 高度
-			AbsListView.LayoutParams param = new AbsListView.LayoutParams(
-					android.view.ViewGroup.LayoutParams.FILL_PARENT,
-					mGridView.getHeight()/linenum);//传入自己需要的宽高
-			view.setLayoutParams(param);
+<pre><code class="language-java">//自动调节好 item 高度
+AbsListView.LayoutParams param = new AbsListView.LayoutParams(
+        android.view.ViewGroup.LayoutParams.FILL_PARENT,
+        mGridView.getHeight()/linenum);//传入自己需要的宽高
+view.setLayoutParams(param);
 </code></pre>
 <p>其中 view为getView()中的viewGroup,而 linenum为根据数据项多少，计算出来的要显示几行数据，它通过在getCount中先计算出来。</p>
 <h2 id="更完整的实现代码如下">更完整的实现代码如下：</h2>
-<pre><code class="language-java">	class ListAdapter extends BaseAdapter {
-		private int linenum = 1;
-		@Override
-		public int getCount() {
-			int count = mListData.size();
-			linenum = (count+3)/4;
-			return count;
-		}
-        
-        @Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
-			View view = YaoTouPiaoSelectActivity.this.getLayoutInflater().inflate(R.layout.item_dt_yao_tou_piao, null);
+<pre><code class="language-java">class ListAdapter extends BaseAdapter {
+    private int linenum = 1;
+    @Override
+    public int getCount() {
+        int count = mListData.size();
+        linenum = (count+3)/4;
+        return count;
+    }
+    
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View view = YaoTouPiaoSelectActivity.this.getLayoutInflater().inflate(R.layout.item_dt_yao_tou_piao, null);
 
-			//自动调节好 item 高度
-			AbsListView.LayoutParams param = new AbsListView.LayoutParams(
-					android.view.ViewGroup.LayoutParams.FILL_PARENT,
-					mGridView.getHeight()/linenum);//传入自己需要的宽高
-			view.setLayoutParams(param);
+        //自动调节好 item 高度
+        AbsListView.LayoutParams param = new AbsListView.LayoutParams(
+                android.view.ViewGroup.LayoutParams.FILL_PARENT,
+                mGridView.getHeight()/linenum);//传入自己需要的宽高
+        view.setLayoutParams(param);
 
 
-            //... 其它代码部分
-		}
+        //... 其它代码部分
+    }
 
 // ...其它部分代码
 }
