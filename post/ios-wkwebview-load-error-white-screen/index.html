@@ -3,7 +3,7 @@
     <meta charset="utf-8"/>
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>android的scrollView内部加入listView的方法 | 写笔记</title>
+<title>ios WKWebView因AppTransportSecurity可加载https但无法加载http问题 | 写笔记</title>
 <link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585561669733">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="http://114.55.209.43/styles/main.css">
@@ -87,68 +87,47 @@
         <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
                 <h2 class="post-title">
-                    android的scrollView内部加入listView的方法
+                    ios WKWebView因AppTransportSecurity可加载https但无法加载http问题
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
-                        · 2020-03-26 ·
+                        · 2020-03-30 ·
                     </time>
                     
-                        <a href="http://114.55.209.43/tag/android/" class="post-tags">
-                            # android
+                        <a href="http://114.55.209.43/tag/ios/" class="post-tags">
+                            # ios
                         </a>
                     
                 </div>
                 <div class="post-content">
-                    <p>在ScollView中加入ListView会出问题，因为ListView已经自带滚动效果，如果把ListView放到ScrollView中，里面的listView <strong>高度无法计算出来</strong> 一般显示时只会显示ListView的第一项；</p>
+                    <p>ios开发中，由于安全原因，系统会拦截http请求，要我们开启AppTransportSecurity权限后，才能正常使用； 会导致WKWebView加载http网络地址出现“白屏”，WKWebView加载不出来网页了， 但是使用https地址加载又能正常工作。</p>
 <!-- more -->
-<p>我们可以重写 ListView的 onMeasure()方法，即可解决这个问题:<br>
-<img src="http://114.55.209.43/post-images/1585293805180.png" alt="重写onMeasure方法" loading="lazy"></p>
-<h2 id="代码如下">代码如下：</h2>
-<pre><code class="language-java">    /**
-     * 只需要重写这个方法即可
-     */
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE &gt;&gt; 2,
-                MeasureSpec.AT_MOST);
-        super.onMeasure(widthMeasureSpec, expandSpec);
-    }
-</code></pre>
-<h2 id="完整的代码为">完整的代码为：</h2>
-<pre><code class="language-java">package cn.xiebj.view;
-
-import android.content.Context;
-import android.util.AttributeSet;
-import android.widget.ListView;
-
-public class ListViewForScrollView extends ListView {
-
-    public ListViewForScrollView(Context context) {
-        super(context);
-    }
-
-    public ListViewForScrollView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public ListViewForScrollView(Context context, AttributeSet attrs,
-                                 int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
-    /**
-     * 只需要重写这个方法即可
-     */
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE &gt;&gt; 2,
-                MeasureSpec.AT_MOST);
-        super.onMeasure(widthMeasureSpec, expandSpec);
-    }
+<h2 id="加载网页的代码如下">加载网页的代码如下:</h2>
+<pre><code class="language-c">//加载函数
+-(void)loadWkWebView:(NSString *)url{
+    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.bounds];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    [webView loadRequest:request];
+    [self.view addSubview:webView];
 }
 </code></pre>
-<p>然后在 layout的xml中，使用 cn.xiebj.view.ListViewForScrollView 来代替 ListView放置到 ScrollView内部即可。</p>
+<h2 id="调用方式如下">调用方式如下:</h2>
+<pre><code class="language-c">    [self loadWkWebView:@&quot;https://www.baidu.com/&quot; ];  // https能正常工作
+    //[self loadWkWebView:@&quot;http://www.xiebj.cn/&quot; ];  // 默认http会因为安全原因被拦截
+</code></pre>
+<h2 id="解决方法">解决方法：</h2>
+<p>在 info.plist文件中，新增 App Transport Security Settings 字典，并加入 Allow Arbitrary Loads  值为 YES<br>
+截图如下：<br>
+<img src="http://114.55.209.43/post-images/1585560959038.png" alt="App Transport Security Settings" loading="lazy"></p>
+<p>修改 info.plist后实际 加入内容如下：</p>
+<pre><code class="language-xml">   &lt;key&gt;NSAppTransportSecurity&lt;/key&gt;
+   &lt;dict&gt;
+       &lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;
+       &lt;true/&gt;
+   &lt;/dict&gt;
+</code></pre>
+<p>修改后运行结果如下：<br>
+<img src="http://114.55.209.43/post-images/1585561251667.png" alt="加入NSAppTransportSecurity后能加载http了" loading="lazy"></p>
 
                 </div>
             </article>
@@ -157,8 +136,8 @@ public class ListViewForScrollView extends ListView {
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="http://114.55.209.43/post/image-not-catched-if-token-change/" class="post-title gt-a-link">
-                    android图片加载com.nostra13.universalimageloader库,token变化了图片不缓存问题
+                <a href="http://114.55.209.43/post/gridview-adjust-item-size/" class="post-title gt-a-link">
+                    GridView实现内部item高度的加载时动态调节(根据count个数决定显示几行)
                 </a>
             </div>
         

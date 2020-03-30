@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://114.55.209.43</id>
     <title>写笔记</title>
-    <updated>2020-03-27T16:28:35.229Z</updated>
+    <updated>2020-03-30T09:50:15.579Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://114.55.209.43"/>
     <link rel="self" href="http://114.55.209.43/atom.xml"/>
@@ -11,61 +11,41 @@
     <icon>http://114.55.209.43/favicon.ico</icon>
     <rights>All rights reserved 2020, 写笔记</rights>
     <entry>
-        <title type="html"><![CDATA[GridView实现内部item高度的加载时动态调节(根据count个数决定显示几行)]]></title>
-        <id>http://114.55.209.43/post/gridview-adjust-item-size/</id>
-        <link href="http://114.55.209.43/post/gridview-adjust-item-size/">
+        <title type="html"><![CDATA[ios WKWebView因AppTransportSecurity可加载https但无法加载http问题]]></title>
+        <id>http://114.55.209.43/post/ios-wkwebview-load-error-white-screen/</id>
+        <link href="http://114.55.209.43/post/ios-wkwebview-load-error-white-screen/">
         </link>
-        <updated>2020-03-27T11:09:05.000Z</updated>
-        <summary type="html"><![CDATA[<p>GridView内部item高度的动态调节实现，一般情况在知道 gridview总高度时， android系统会自动去适配调整，但是界面会挤在上端，没有办法实现自动整个平铺开来，导致界面不是我们想要的结果。</p>
+        <updated>2020-03-30T12:20:30.000Z</updated>
+        <summary type="html"><![CDATA[<p>ios开发中，由于安全原因，系统会拦截http请求，要我们开启AppTransportSecurity权限后，才能正常使用； 会导致WKWebView加载http网络地址出现“白屏”，WKWebView加载不出来网页了， 但是使用https地址加载又能正常工作。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>GridView内部item高度的动态调节实现，一般情况在知道 gridview总高度时， android系统会自动去适配调整，但是界面会挤在上端，没有办法实现自动整个平铺开来，导致界面不是我们想要的结果。</p>
+        <content type="html"><![CDATA[<p>ios开发中，由于安全原因，系统会拦截http请求，要我们开启AppTransportSecurity权限后，才能正常使用； 会导致WKWebView加载http网络地址出现“白屏”，WKWebView加载不出来网页了， 但是使用https地址加载又能正常工作。</p>
 <!-- more -->
-<h2 id="延用网络上-csdn类似的问题描述如下">延用网络上 csdn类似的问题描述如下：</h2>
-<p>如：想要的结果为：<br>
-<img src="http://114.55.209.43/post-images/1585295314815.png" alt="" loading="lazy"><br>
-而用android自带的实现效果，出来的结果却时：<br>
-<img src="http://114.55.209.43/post-images/1585295338974.png" alt="" loading="lazy"></p>
-<p>这时我们可以通过在Adapter的 getView()中通过setLayoutParams() 来调节内部的 item高度:</p>
-<h2 id="实现代码如下">实现代码如下：</h2>
-<pre><code class="language-java">			//自动调节好 item 高度
-			AbsListView.LayoutParams param = new AbsListView.LayoutParams(
-					android.view.ViewGroup.LayoutParams.FILL_PARENT,
-					mGridView.getHeight()/linenum);//传入自己需要的宽高
-			view.setLayoutParams(param);
-</code></pre>
-<p>其中 view为getView()中的viewGroup,而 linenum为根据数据项多少，计算出来的要显示几行数据，它通过在getCount中先计算出来。</p>
-<h2 id="更完整的实现代码如下">更完整的实现代码如下：</h2>
-<pre><code class="language-java">	class ListAdapter extends BaseAdapter {
-		private int linenum = 1;
-		@Override
-		public int getCount() {
-			int count = mListData.size();
-			linenum = (count+3)/4;
-			return count;
-		}
-        
-        @Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
-			View view = YaoTouPiaoSelectActivity.this.getLayoutInflater().inflate(R.layout.item_dt_yao_tou_piao, null);
-
-			//自动调节好 item 高度
-			AbsListView.LayoutParams param = new AbsListView.LayoutParams(
-					android.view.ViewGroup.LayoutParams.FILL_PARENT,
-					mGridView.getHeight()/linenum);//传入自己需要的宽高
-			view.setLayoutParams(param);
-
-
-            //... 其它代码部分
-		}
-
-// ...其它部分代码
+<h2 id="加载网页的代码如下">加载网页的代码如下:</h2>
+<pre><code class="language-c">//加载函数
+-(void)loadWkWebView:(NSString *)url{
+    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.bounds];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    [webView loadRequest:request];
+    [self.view addSubview:webView];
 }
 </code></pre>
-<h2 id="实现结果如下">实现结果如下</h2>
-<p>当数据显示为2行时，它把整个的gridview高度的一半用作item高度：<br>
-<img src="http://114.55.209.43/post-images/1585295792872.png" alt="" loading="lazy"><br>
-而当数据显示为1行时，它自动把整个 gridview当作item的高度<br>
-<img src="http://114.55.209.43/post-images/1585295865175.png" alt="" loading="lazy"></p>
+<h2 id="调用方式如下">调用方式如下:</h2>
+<pre><code class="language-c">    [self loadWkWebView:@&quot;https://www.baidu.com/&quot; ];  // https能正常工作
+    //[self loadWkWebView:@&quot;http://www.xiebj.cn/&quot; ];  // 默认http会因为安全原因被拦截
+</code></pre>
+<h2 id="解决方法">解决方法：</h2>
+<p>在 info.plist文件中，新增 App Transport Security Settings 字典，并加入 Allow Arbitrary Loads  值为 YES<br>
+截图如下：<br>
+<img src="http://114.55.209.43/post-images/1585560959038.png" alt="App Transport Security Settings" loading="lazy"></p>
+<p>修改 info.plist后实际 加入内容如下：</p>
+<pre><code class="language-xml">   &lt;key&gt;NSAppTransportSecurity&lt;/key&gt;
+   &lt;dict&gt;
+       &lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;
+       &lt;true/&gt;
+   &lt;/dict&gt;
+</code></pre>
+<p>修改后运行结果如下：<br>
+<img src="http://114.55.209.43/post-images/1585561251667.png" alt="加入NSAppTransportSecurity后能加载http了" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>

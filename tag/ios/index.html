@@ -3,7 +3,7 @@
     <meta charset="utf-8"/>
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>android的scrollView内部加入listView的方法 | 写笔记</title>
+<title>ios | 写笔记</title>
 <link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585561669733">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="http://114.55.209.43/styles/main.css">
@@ -30,11 +30,11 @@
 
 
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 </head>
 <body>
 <div class="main gt-bg-theme-color-first">
-    <nav class="navbar navbar-expand-lg">
+    <div class="main-content">
+        <nav class="navbar navbar-expand-lg">
     <div class="navbar-brand">
         <img class="user-avatar" src="/images/avatar.png" alt="头像">
         <div class="site-name gt-c-content-color-first">
@@ -83,87 +83,50 @@
         </div>
     </div>
 </nav>
-    <div class="post-container">
-        <div class="post-detail gt-bg-theme-color-second">
-            <article class="gt-post-content">
-                <h2 class="post-title">
-                    android的scrollView内部加入listView的方法
-                </h2>
-                <div class="post-info">
-                    <time class="post-time gt-c-content-color-first">
-                        · 2020-03-26 ·
-                    </time>
-                    
-                        <a href="http://114.55.209.43/tag/android/" class="post-tags">
-                            # android
-                        </a>
-                    
-                </div>
-                <div class="post-content">
-                    <p>在ScollView中加入ListView会出问题，因为ListView已经自带滚动效果，如果把ListView放到ScrollView中，里面的listView <strong>高度无法计算出来</strong> 一般显示时只会显示ListView的第一项；</p>
-<!-- more -->
-<p>我们可以重写 ListView的 onMeasure()方法，即可解决这个问题:<br>
-<img src="http://114.55.209.43/post-images/1585293805180.png" alt="重写onMeasure方法" loading="lazy"></p>
-<h2 id="代码如下">代码如下：</h2>
-<pre><code class="language-java">    /**
-     * 只需要重写这个方法即可
-     */
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE &gt;&gt; 2,
-                MeasureSpec.AT_MOST);
-        super.onMeasure(widthMeasureSpec, expandSpec);
-    }
-</code></pre>
-<h2 id="完整的代码为">完整的代码为：</h2>
-<pre><code class="language-java">package cn.xiebj.view;
-
-import android.content.Context;
-import android.util.AttributeSet;
-import android.widget.ListView;
-
-public class ListViewForScrollView extends ListView {
-
-    public ListViewForScrollView(Context context) {
-        super(context);
-    }
-
-    public ListViewForScrollView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public ListViewForScrollView(Context context, AttributeSet attrs,
-                                 int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
-    /**
-     * 只需要重写这个方法即可
-     */
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE &gt;&gt; 2,
-                MeasureSpec.AT_MOST);
-        super.onMeasure(widthMeasureSpec, expandSpec);
-    }
-}
-</code></pre>
-<p>然后在 layout的xml中，使用 cn.xiebj.view.ListViewForScrollView 来代替 ListView放置到 ScrollView内部即可。</p>
-
-                </div>
-            </article>
+        <div class="current-tag-container">
+            <h2 class="title gt-c-content-color-first">
+                #ios
+            </h2>
         </div>
-
+        <div class="post-list-container">
+    <div class="post-inner">
         
-            <div class="next-post">
-                <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="http://114.55.209.43/post/image-not-catched-if-token-change/" class="post-title gt-a-link">
-                    android图片加载com.nostra13.universalimageloader库,token变化了图片不缓存问题
-                </a>
+            <div class="post gt-bg-theme-color-second">
+                <div class="post-left">
+                    <div>
+                        
+                        <a href="http://114.55.209.43/post/ios-wkwebview-load-error-white-screen/">
+                            <span class="post-title gt-c-content-color-first">ios WKWebView因AppTransportSecurity可加载https但无法加载http问题</span>
+                        </a>
+                    </div>
+                    <div class="gt-post-content post-abstract gt-c-content-color-second">
+                        <p>ios开发中，由于安全原因，系统会拦截http请求，要我们开启AppTransportSecurity权限后，才能正常使用； 会导致WKWebView加载http网络地址出现“白屏”，WKWebView加载不出来网页了， 但是使用https地址加载又能正常工作。</p>
+
+                    </div>
+                    <div class="post-info">
+                        <time class="post-time gt-c-content-color-first">
+                            发布于 · 2020-03-30 ·
+                        </time>
+                        
+                            <a href="http://114.55.209.43/tag/ios/" class="post-tag">
+                                # ios
+                            </a>
+                        
+                    </div>
+                </div>
+                
+                    <a href="http://114.55.209.43/post/ios-wkwebview-load-error-white-screen/" class="post-feature-image"
+                       style="background-image: url('http://114.55.209.43/post-images/ios-wkwebview-load-error-white-screen.png')">
+                    </a>
+                
             </div>
         
-
-        
+    </div>
+</div>
+        <div class="pagination-container">
+    
+    
+</div>
 
         <div class="site-footer gt-c-content-color-first">
     <div class="slogan gt-c-content-color-first">学习工作过程中，碰到的常用问题记录，简单书写笔记</div>
@@ -188,7 +151,6 @@ public class ListViewForScrollView extends ListView {
 <script>
     hljs.initHighlightingOnLoad()
 </script>
-
 
     </div>
 </div>
