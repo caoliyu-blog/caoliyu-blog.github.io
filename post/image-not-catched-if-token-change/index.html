@@ -4,9 +4,9 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>android图片加载com.nostra13.universalimageloader库,token变化了图片不缓存问题 | 写笔记</title>
-<link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585562466243">
+<link rel="shortcut icon" href="http://xiebj.cn/favicon.ico?v=1586335935634">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
-<link rel="stylesheet" href="http://114.55.209.43/styles/main.css">
+<link rel="stylesheet" href="http://xiebj.cn/styles/main.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
@@ -94,7 +94,7 @@
                         · 2020-03-26 ·
                     </time>
                     
-                        <a href="http://114.55.209.43/tag/android/" class="post-tags">
+                        <a href="http://xiebj.cn/tag/android/" class="post-tags">
                             # android
                         </a>
                     
@@ -142,7 +142,7 @@ private void initImageLoader(Context context) {
 </code></pre>
 <h2 id="解决方法为">解决方法为：</h2>
 <p>重写 Md5FileNameGenerator类的public String generate(String s)方法，把 ?后面的 token值参数据给去除掉再生成 md5文件名。<br>
-<img src="http://114.55.209.43/post-images/1585293286252.png" alt="" loading="lazy"></p>
+<img src="http://xiebj.cn/post-images/1585293286252.png" alt="" loading="lazy"></p>
 <p>贴的代码如下：</p>
 <pre><code class="language-java">
 // 重写 generate方法， 把 ?后面的参数给去除掉，使 token变化了文件还能缓存
@@ -169,7 +169,7 @@ config.diskCacheFileNameGenerator(generator);
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="http://114.55.209.43/post/centos76-basic-server-config/" class="post-title gt-a-link">
+                <a href="http://xiebj.cn/post/centos76-basic-server-config/" class="post-title gt-a-link">
                     centos7.6服务器基本环境配置(网络,tftp,mysql)
                 </a>
             </div>
@@ -194,7 +194,7 @@ config.diskCacheFileNameGenerator(generator);
             
         
     </div>
-    书写笔记，记录点滴  Powered by <a href="http://xiebj.net">caoliyu1086@163.com</a> | <a href="http://114.55.209.43/atom.xml" target="_blank">RSS</a>
+    书写笔记，记录点滴  Powered by <a href="http://xiebj.cn">caoliyu1086@163.com</a> | <a href="http://xiebj.cn/atom.xml" target="_blank">RSS</a>
 </div>
 
 <script>

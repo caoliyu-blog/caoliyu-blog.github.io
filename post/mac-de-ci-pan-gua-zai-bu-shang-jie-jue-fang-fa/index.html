@@ -3,7 +3,7 @@
     <meta charset="utf-8"/>
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>关于 | 写笔记</title>
+<title>mac的磁盘挂载不上解决方法 | 写笔记</title>
 <link rel="shortcut icon" href="http://xiebj.cn/favicon.ico?v=1586335935634">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="http://xiebj.cn/styles/main.css">
@@ -87,28 +87,35 @@
         <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
                 <h2 class="post-title">
-                    关于
+                    mac的磁盘挂载不上解决方法
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
-                        · 2020-03-20 ·
+                        · 2020-04-07 ·
                     </time>
                     
                 </div>
                 <div class="post-content">
-                    <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<p>本站是个人站点，把学习工作过程中，碰到的常见问题记录，简单书写笔记。</p>
-<h2 id="联系我呀">📬 联系我呀</h2>
-<pre><code> caoliyu1086@163.com   
+                    <p>mac外接盘时，有时个别盘符会异常挂载不上，用系统工具和diskutil普通命令无法挂载成功。</p>
+<!-- more -->
+<p>用如下方法挂载能成功：</p>
+<pre><code class="language-sh">sudo diskutil eject disk2
+sudo diskutil unmountDisk force disk2
+
+sudo diskutil mountDisk disk2
 </code></pre>
 
                 </div>
             </article>
         </div>
 
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="http://xiebj.cn/post/chun-dai-ma-xie-ios-jie-mian-zui-jian-dan-de-viewcontroller-qi-dong-fang-fa/" class="post-title gt-a-link">
+                    纯代码写ios界面: 最简单的ViewController启动方法
+                </a>
+            </div>
         
 
         

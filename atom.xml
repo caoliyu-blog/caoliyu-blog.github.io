@@ -1,51 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>http://114.55.209.43</id>
+    <id>http://xiebj.cn</id>
     <title>写笔记</title>
-    <updated>2020-03-30T10:01:10.218Z</updated>
+    <updated>2020-04-08T08:52:17.668Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="http://114.55.209.43"/>
-    <link rel="self" href="http://114.55.209.43/atom.xml"/>
+    <link rel="alternate" href="http://xiebj.cn"/>
+    <link rel="self" href="http://xiebj.cn/atom.xml"/>
     <subtitle>学习工作过程中，碰到的常用问题记录，简单书写笔记</subtitle>
-    <logo>http://114.55.209.43/images/avatar.png</logo>
-    <icon>http://114.55.209.43/favicon.ico</icon>
+    <logo>http://xiebj.cn/images/avatar.png</logo>
+    <icon>http://xiebj.cn/favicon.ico</icon>
     <rights>All rights reserved 2020, 写笔记</rights>
     <entry>
-        <title type="html"><![CDATA[ios WKWebView因AppTransportSecurity可加载https但无法加载http问题]]></title>
-        <id>http://114.55.209.43/post/ios-wkwebview-load-error-white-screen/</id>
-        <link href="http://114.55.209.43/post/ios-wkwebview-load-error-white-screen/">
+        <title type="html"><![CDATA[mac的磁盘挂载不上解决方法]]></title>
+        <id>http://xiebj.cn/post/mac-de-ci-pan-gua-zai-bu-shang-jie-jue-fang-fa/</id>
+        <link href="http://xiebj.cn/post/mac-de-ci-pan-gua-zai-bu-shang-jie-jue-fang-fa/">
         </link>
-        <updated>2020-03-30T12:20:30.000Z</updated>
-        <summary type="html"><![CDATA[<p>ios开发中，由于安全原因，系统会拦截http请求，要我们开启AppTransportSecurity权限后，才能正常使用； 会导致WKWebView加载http网络地址出现“白屏”，WKWebView加载不出来网页了， 但是使用https地址加载又能正常工作。</p>
+        <updated>2020-04-07T01:57:50.000Z</updated>
+        <summary type="html"><![CDATA[<p>mac外接盘时，有时个别盘符会异常挂载不上，用系统工具和diskutil普通命令无法挂载成功。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>ios开发中，由于安全原因，系统会拦截http请求，要我们开启AppTransportSecurity权限后，才能正常使用； 会导致WKWebView加载http网络地址出现“白屏”，WKWebView加载不出来网页了， 但是使用https地址加载又能正常工作。</p>
+        <content type="html"><![CDATA[<p>mac外接盘时，有时个别盘符会异常挂载不上，用系统工具和diskutil普通命令无法挂载成功。</p>
 <!-- more -->
-<h2 id="加载网页的代码如下">加载网页的代码如下:</h2>
-<pre><code class="language-c">//加载函数
--(void)loadWkWebView:(NSString *)url{
-    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.bounds];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
-    [webView loadRequest:request];
-    [self.view addSubview:webView];
-}
+<p>用如下方法挂载能成功：</p>
+<pre><code class="language-sh">sudo diskutil eject disk2
+sudo diskutil unmountDisk force disk2
+
+sudo diskutil mountDisk disk2
 </code></pre>
-<h2 id="调用方式如下">调用方式如下:</h2>
-<pre><code class="language-c">[self loadWkWebView:@&quot;https://www.baidu.com/&quot; ];  // https能正常工作
-//[self loadWkWebView:@&quot;http://www.xiebj.cn/&quot; ];  // 默认http会因为安全原因被拦截
-</code></pre>
-<h2 id="解决方法">解决方法：</h2>
-<p>在 info.plist文件中，新增 App Transport Security Settings 字典，并加入 Allow Arbitrary Loads  值为 YES<br>
-截图如下：<br>
-<img src="http://114.55.209.43/post-images/1585560959038.png" alt="App Transport Security Settings" loading="lazy"></p>
-<p>修改 info.plist后实际 加入内容如下：</p>
-<pre><code class="language-xml">&lt;key&gt;NSAppTransportSecurity&lt;/key&gt;
-&lt;dict&gt;
-   &lt;key&gt;NSAllowsArbitraryLoads&lt;/key&gt;
-   &lt;true/&gt;
-&lt;/dict&gt;
-</code></pre>
-<p>修改后运行结果如下：<br>
-<img src="http://114.55.209.43/post-images/1585561251667.png" alt="加入NSAppTransportSecurity后能加载http了" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>

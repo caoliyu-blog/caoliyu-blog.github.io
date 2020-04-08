@@ -3,7 +3,7 @@
     <meta charset="utf-8"/>
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>关于 | 写笔记</title>
+<title>纯代码写ios界面: 最简单的ViewController启动方法 | 写笔记</title>
 <link rel="shortcut icon" href="http://xiebj.cn/favicon.ico?v=1586335935634">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="http://xiebj.cn/styles/main.css">
@@ -87,28 +87,61 @@
         <div class="post-detail gt-bg-theme-color-second">
             <article class="gt-post-content">
                 <h2 class="post-title">
-                    关于
+                    纯代码写ios界面: 最简单的ViewController启动方法
                 </h2>
                 <div class="post-info">
                     <time class="post-time gt-c-content-color-first">
-                        · 2020-03-20 ·
+                        · 2020-03-31 ·
                     </time>
                     
                 </div>
                 <div class="post-content">
-                    <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
+                    <p>ios新建工程后，默认是用 .storyboard的方式来启动界面的，如果想要纯代码的方式来启动 viewController，则需要自己在 AppDelegate中实现它。</p>
+<!-- more -->
+<p>UINavigationController继承自UIViewController，是一个基于栈的容器型控制器。既然是容器，它就能装一些东西，比如UIView能装各种组件（UILabel,UIButton等），UINavigationController装的是视图控制器。</p>
+<p>##一个UINavigationController包含了几个部分，</p>
+<blockquote>
+<p>Navigation Stack导航栈，它以栈的形式来管理视图控制器。栈的一个视图控制器（栈底），称为根视图控制器，其他称为子视图控制器。栈中的控制器可以通过self.navigationController找到UINavigationController的实例。</p>
 </blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<p>本站是个人站点，把学习工作过程中，碰到的常见问题记录，简单书写笔记。</p>
-<h2 id="联系我呀">📬 联系我呀</h2>
-<pre><code> caoliyu1086@163.com   
+<blockquote>
+<p>UINavigationBar导航条，栈中的视图控制默认会在顶部加一个导航条，虽然Navigation Bar显示在子视图控制器的界面上，但是它是由UINavigationController实例管理的，不过，导航条的内容却是由子视图控制器决定（通过self.navigationItem设置）。</p>
+</blockquote>
+<blockquote>
+<p>UIToolbar工具栏，UINavigationController在子视图的底部提供了工具栏，默认不显示，也很少用到。</p>
+</blockquote>
+<p>首先在 AppDelegate.h中定义 window对象</p>
+<pre><code class="language-c">@property (strong, nonatomic) UIWindow *window;
+</code></pre>
+<p>然后重写 application: didFinishLaunchingWithOptions 方法，代码如下：</p>
+<pre><code class="language-c">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Override point for customization after application launch.
+    
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    self.window = [[UIWindow alloc] initWithFrame:rect];
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+
+    ViewController *rootViewController = [[ViewController alloc] init];
+    UINavigationController *rootNavigationController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    self.window.rootViewController = rootNavigationController;
+    
+    [self.window makeKeyAndVisible];
+    return YES;
+}
+
 </code></pre>
 
                 </div>
             </article>
         </div>
 
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="http://xiebj.cn/post/ios-wkwebview-load-error-white-screen/" class="post-title gt-a-link">
+                    ios WKWebView因AppTransportSecurity可加载https但无法加载http问题
+                </a>
+            </div>
         
 
         

@@ -4,9 +4,9 @@
 <meta name="description" content=""/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>GridView实现内部item高度的加载时动态调节(根据count个数决定显示几行) | 写笔记</title>
-<link rel="shortcut icon" href="http://114.55.209.43/favicon.ico?v=1585562466243">
+<link rel="shortcut icon" href="http://xiebj.cn/favicon.ico?v=1586335935634">
 <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
-<link rel="stylesheet" href="http://114.55.209.43/styles/main.css">
+<link rel="stylesheet" href="http://xiebj.cn/styles/main.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
@@ -94,7 +94,7 @@
                         · 2020-03-27 ·
                     </time>
                     
-                        <a href="http://114.55.209.43/tag/android/" class="post-tags">
+                        <a href="http://xiebj.cn/tag/android/" class="post-tags">
                             # android
                         </a>
                     
@@ -104,9 +104,9 @@
 <!-- more -->
 <h2 id="延用网络上-csdn类似的问题描述如下">延用网络上 csdn类似的问题描述如下：</h2>
 <p>如：想要的结果为：<br>
-<img src="http://114.55.209.43/post-images/1585295314815.png" alt="" loading="lazy"><br>
+<img src="http://xiebj.cn/post-images/1585295314815.png" alt="" loading="lazy"><br>
 而用android自带的实现效果，出来的结果却时：<br>
-<img src="http://114.55.209.43/post-images/1585295338974.png" alt="" loading="lazy"></p>
+<img src="http://xiebj.cn/post-images/1585295338974.png" alt="" loading="lazy"></p>
 <p>这时我们可以通过在Adapter的 getView()中通过setLayoutParams() 来调节内部的 item高度:</p>
 <h2 id="实现代码如下">实现代码如下：</h2>
 <pre><code class="language-java">//自动调节好 item 高度
@@ -145,9 +145,9 @@ view.setLayoutParams(param);
 </code></pre>
 <h2 id="实现结果如下">实现结果如下</h2>
 <p>当数据显示为2行时，它把整个的gridview高度的一半用作item高度：<br>
-<img src="http://114.55.209.43/post-images/1585295792872.png" alt="" loading="lazy"><br>
+<img src="http://xiebj.cn/post-images/1585295792872.png" alt="" loading="lazy"><br>
 而当数据显示为1行时，它自动把整个 gridview当作item的高度<br>
-<img src="http://114.55.209.43/post-images/1585295865175.png" alt="" loading="lazy"></p>
+<img src="http://xiebj.cn/post-images/1585295865175.png" alt="" loading="lazy"></p>
 
                 </div>
             </article>
@@ -156,7 +156,7 @@ view.setLayoutParams(param);
         
             <div class="next-post">
                 <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="http://114.55.209.43/post/android-listview-in-scrollview-problem/" class="post-title gt-a-link">
+                <a href="http://xiebj.cn/post/android-listview-in-scrollview-problem/" class="post-title gt-a-link">
                     android的scrollView内部加入listView的方法
                 </a>
             </div>
@@ -181,7 +181,7 @@ view.setLayoutParams(param);
             
         
     </div>
-    书写笔记，记录点滴  Powered by <a href="http://xiebj.net">caoliyu1086@163.com</a> | <a href="http://114.55.209.43/atom.xml" target="_blank">RSS</a>
+    书写笔记，记录点滴  Powered by <a href="http://xiebj.cn">caoliyu1086@163.com</a> | <a href="http://xiebj.cn/atom.xml" target="_blank">RSS</a>
 </div>
 
 <script>
